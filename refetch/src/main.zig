@@ -125,12 +125,12 @@ fn printOutput(writer: *std.Io.Writer, env: *const Env, sys: *const System) std.
         .{
             // user@hostname
             env.USER,
-            &sys.uts.nodename,
+            std.mem.sliceTo(&sys.uts.nodename, 0),
             // Distribution
             sys.pretty_name,
             // Kernel
-            &sys.uts.sysname,
-            &sys.uts.release,
+            std.mem.sliceTo(&sys.uts.sysname, 0),
+            std.mem.sliceTo(&sys.uts.release, 0),
             // CPU
             sys.cpu.model_name,
             // Memory
