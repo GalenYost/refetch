@@ -119,9 +119,10 @@ fn printOutput(writer: *std.Io.Writer, env: *const Env, sys: *const System) std.
             lc ++ ll[2] ++ cr ++ "\tKernel:         {s} ({s})\n" ++
             lc ++ ll[3] ++ cr ++ "\tCPU:            {s}\n" ++
             lc ++ ll[4] ++ cr ++ "\tMemory:         {d} MiB / {d} MiB\n" ++
-            lc ++ ll[5] ++ cr ++ "\tShell:          {s}\n" ++
-            lc ++ ll[6] ++ cr ++ "\tTerminal:       {s}\n" ++
-            lc ++ ll[7] ++ cr ++ "\tUptime:         {f}\n",
+            lc ++ ll[5] ++ cr ++ "\tSwap:           {d} MiB / {d} MiB\n" ++
+            lc ++ ll[6] ++ cr ++ "\tShell:          {s}\n" ++
+            lc ++ ll[7] ++ cr ++ "\tTerminal:       {s}\n" ++
+            "\t\tUptime:         {f}\n",
         .{
             // user@hostname
             env.USER,
@@ -136,6 +137,9 @@ fn printOutput(writer: *std.Io.Writer, env: *const Env, sys: *const System) std.
             // Memory
             sys.mem.MemTotal - sys.mem.MemAvailable,
             sys.mem.MemTotal,
+            // Swap
+            sys.mem.SwapTotal - sys.mem.SwapFree,
+            sys.mem.SwapTotal,
             // Shell
             std.fs.path.basename(env.SHELL),
             // Terminal
@@ -144,7 +148,6 @@ fn printOutput(writer: *std.Io.Writer, env: *const Env, sys: *const System) std.
             @as(Uptime, @enumFromInt(sys.info.uptime)),
         },
     );
-
     try writer.flush();
 }
 

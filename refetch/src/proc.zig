@@ -1,10 +1,17 @@
 pub const MemInfo = struct {
     const Field = std.meta.FieldEnum(MemInfo);
 
-    pub const zero: MemInfo = .{ .MemTotal = 0, .MemAvailable = 0 };
+    pub const zero: MemInfo = .{
+        .MemTotal = 0,
+        .MemAvailable = 0,
+        .SwapTotal = 0,
+        .SwapFree = 0,
+    };
 
     MemTotal: u64,
     MemAvailable: u64,
+    SwapTotal: u64,
+    SwapFree: u64,
 
     pub fn read(errno: *linux.E, buffer: []u8) ?MemInfo {
         const open_rc = linux.open("/proc/meminfo", .{}, 0);
